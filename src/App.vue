@@ -5,7 +5,10 @@
     </div>
     <div class="right">
       <topbar />
-      <show />
+      <!-- <show /> -->
+      <div class="content">
+        <router-view></router-view>
+      </div>
       <bottom />
     </div>
   </div>
@@ -14,7 +17,6 @@
 
 <script setup lang='ts'>
 import topbar from './components/topbar.vue';
-import show from './components/show.vue';
 import bottom from './components/bottom.vue';
 import functionMenu from './components/functionMenu.vue';
 </script>
@@ -40,6 +42,10 @@ import functionMenu from './components/functionMenu.vue';
     display: flex;
     flex-direction: column;
 
+    .content {
+      height: 84vh;
+      background-color: skyblue;
+    }
   }
 }
 </style>

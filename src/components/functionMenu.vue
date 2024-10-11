@@ -61,27 +61,10 @@ const handleClose = (key: string, keyPath: string[]) => {
 </script>
 
 <style lang="scss">
-// tac {
-//     // margin-top: 20px;
-//     height: 100vh;
-// }
-
 .el-menu-vertical-demo {
-    // width: 200px;
+
     height: 100vh;
 
-    // background-color: #545c64;
-    // color: #fff;
-    // .el-menu-item {
-    //     color: #fff;
-    // }
-    // .el-submenu__title {
-    //     color: #fff;
-    // }
-    // .el-menu-item-group__title {
-    //     color: #fff;
-    // }
-    // 提高每个菜单项的高度 
     .el-menu-item {
         height: 10vh;
         line-height: 10vh;
