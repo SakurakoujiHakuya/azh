@@ -1,0 +1,91 @@
+<template>
+    <el-row class="tac">
+        <el-col>
+            <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
+                default-active="2" text-color="#fff" @open="handleOpen" @close="handleClose">
+                <el-menu-item index="1">
+                    <el-icon>
+                        <Search />
+                    </el-icon>
+                    <span>诊断</span>
+                </el-menu-item>
+                <el-menu-item index="2">
+                    <el-icon>
+                        <ChatLineSquare />
+                    </el-icon>
+                    <span>结果分析</span>
+                </el-menu-item>
+                <el-menu-item index="3">
+                    <el-icon>
+                        <Lock />
+                    </el-icon>
+                    <span>加密</span>
+                </el-menu-item>
+                <el-menu-item index="4">
+                    <el-icon>
+                        <Unlock />
+                    </el-icon>
+                    <span>解密</span>
+                </el-menu-item>
+
+                <el-menu-item index="5">
+                    <el-icon>
+                        <Aim />
+                    </el-icon>
+                    <span>安全性分析</span>
+                </el-menu-item>
+                <el-menu-item index="6">
+                    <el-icon>
+                        <setting />
+                    </el-icon>
+                    <span>设置</span>
+                </el-menu-item>
+            </el-menu>
+        </el-col>
+    </el-row>
+</template>
+
+<script lang="ts" setup>
+import {
+    Document,
+    Menu as IconMenu,
+    Location,
+    Setting,
+} from '@element-plus/icons-vue'
+const handleOpen = (key: string, keyPath: string[]) => {
+    console.log(key, keyPath)
+}
+const handleClose = (key: string, keyPath: string[]) => {
+    console.log(key, keyPath)
+}
+</script>
+
+<style lang="scss">
+// tac {
+//     // margin-top: 20px;
+//     height: 100vh;
+// }
+
+.el-menu-vertical-demo {
+    // width: 200px;
+    height: 100vh;
+
+    // background-color: #545c64;
+    // color: #fff;
+    // .el-menu-item {
+    //     color: #fff;
+    // }
+    // .el-submenu__title {
+    //     color: #fff;
+    // }
+    // .el-menu-item-group__title {
+    //     color: #fff;
+    // }
+    // 提高每个菜单项的高度 
+    .el-menu-item {
+        height: 10vh;
+        line-height: 10vh;
+        font-size: 2vh;
+    }
+}
+</style>
