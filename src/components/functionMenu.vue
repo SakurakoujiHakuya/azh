@@ -2,11 +2,10 @@
     <el-row class="tac">
         <el-col>
             <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
-                default-active="2" text-color="#fff" @open="handleOpen" @close="handleClose">
-
-
+                text-color="#fff">
+                <!-- 浏览器端刷新页面后选中的菜单高亮会消失，不知道需不需要修改，因为做成桌面端应用的话应该不会刷新 -->
                 <router-link to="/diagnosis">
-                    <el-menu-item index="1">
+                    <el-menu-item index="1" @click="">
                         <el-icon>
                             <Search />
                         </el-icon>
@@ -70,12 +69,6 @@ import {
     Location,
     Setting,
 } from '@element-plus/icons-vue'
-const handleOpen = (key: string, keyPath: string[]) => {
-    console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-    console.log(key, keyPath)
-}
 </script>
 
 <style lang="scss">
