@@ -1,6 +1,6 @@
 <template>
     <div class="bottom">
-        <span>基于xxx的设计</span>
+        <span>基于SE-DenseNet 模型的辅助诊断阿尔兹海默症系统</span>
     </div>
 </template>
 

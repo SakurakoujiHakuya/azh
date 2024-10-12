@@ -44,7 +44,7 @@ import functionMenu from './components/functionMenu.vue';
 
     .content {
       height: 84vh;
-      background-color: skyblue;
+      // background-color: skyblue;
     }
   }
 }

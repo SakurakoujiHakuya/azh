@@ -65,7 +65,7 @@ const nextImage = () => {
     .images-container {
         width: 100%;
         height: 85%;
-        // background-color: yellow;
+        background-color: yellow;
         // margin-top: 20px;
         display: flex;
         justify-content: space-around;
@@ -100,14 +100,13 @@ const nextImage = () => {
         flex-direction: column;
         align-items: center;
         // justify-content: space-between;
-        // background-color: pink;
+        background-color: pink;
 
         .upload-button {
             margin-top: 7vh;
             width: 25%;
-            // background-color: blue;
-            // color: white;
-            background-color: skyblue;
+            background-color: blue;
+            color: white;
             cursor: pointer;
             border-radius: 5px;
             position: absolute;
@@ -115,8 +114,7 @@ const nextImage = () => {
         }
 
         .upload-button:hover {
-            color: white;
-            background-color: green;
+            background-color: darkblue;
         }
 
         .navigation-buttons {
@@ -128,8 +126,8 @@ const nextImage = () => {
             align-items: center;
 
             button {
-                background-color: skyblue;
-
+                background-color: blue;
+                color: white;
                 margin-right: 2vh;
                 text-align: center;
                 border-radius: 5px;
@@ -140,8 +138,7 @@ const nextImage = () => {
             }
 
             button:hover {
-                background-color: green;
-                color: white;
+                background-color: darkblue;
             }
         }
     }
