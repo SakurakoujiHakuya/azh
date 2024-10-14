@@ -2,61 +2,50 @@
     <el-row class="tac">
         <el-col>
             <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
-                text-color="#fff">
-                <!-- 浏览器端刷新页面后选中的菜单高亮会消失，不知道需不需要修改，因为做成桌面端应用的话应该不会刷新 -->
-                <router-link to="/diagnosis">
-                    <el-menu-item index="1" @click="">
-                        <el-icon>
-                            <Search />
-                        </el-icon>
-                        <span>诊断</span>
-                    </el-menu-item>
-                </router-link>
+                :default-active="$route.path" text-color="#fff">
+                <el-menu-item index="/diagnosis" @click="changeActive('/diagnosis')">
+                    <el-icon>
+                        <Search />
+                    </el-icon>
+                    <span>诊断</span>
+                </el-menu-item>
 
-                <router-link to="/analyze">
-                    <el-menu-item index="2">
-                        <el-icon>
-                            <ChatLineSquare />
-                        </el-icon>
-                        <span>结果分析</span>
-                    </el-menu-item>
-                </router-link>
+                <el-menu-item index="/analyze" @click="changeActive('/analyze')">
+                    <el-icon>
+                        <ChatLineSquare />
+                    </el-icon>
+                    <span>结果分析</span>
+                </el-menu-item>
 
-                <router-link to="/encipher">
-                    <el-menu-item index="3">
-                        <el-icon>
-                            <Lock />
-                        </el-icon>
-                        <span>加密</span>
-                    </el-menu-item>
-                </router-link>
+                <el-menu-item index="/encipher" @click="changeActive('/encipher')">
+                    <el-icon>
+                        <Lock />
+                    </el-icon>
+                    <span>加密</span>
+                </el-menu-item>
 
-                <router-link to="/decrypt">
-                    <el-menu-item index="4">
-                        <el-icon>
-                            <Unlock />
-                        </el-icon>
-                        <span>解密</span>
-                    </el-menu-item>
-                </router-link>
 
-                <router-link to="/security">
-                    <el-menu-item index="5">
-                        <el-icon>
-                            <Aim />
-                        </el-icon>
-                        <span>安全性分析</span>
-                    </el-menu-item>
-                </router-link>
+                <el-menu-item index="/decrypt" @click="changeActive('/decrypt')">
+                    <el-icon>
+                        <Unlock />
+                    </el-icon>
+                    <span>解密</span>
+                </el-menu-item>
 
-                <router-link to="/setting">
-                    <el-menu-item index="6">
-                        <el-icon>
-                            <setting />
-                        </el-icon>
-                        <span>设置</span>
-                    </el-menu-item>
-                </router-link>
+
+                <el-menu-item index="/security" @click="changeActive('/security')">
+                    <el-icon>
+                        <Aim />
+                    </el-icon>
+                    <span>安全性分析</span>
+                </el-menu-item>
+
+                <el-menu-item index="/setting" @click="changeActive('/setting')">
+                    <el-icon>
+                        <setting />
+                    </el-icon>
+                    <span>设置</span>
+                </el-menu-item>
             </el-menu>
         </el-col>
     </el-row>
@@ -69,6 +58,16 @@ import {
     Location,
     Setting,
 } from '@element-plus/icons-vue'
+
+import { useRoute, useRouter } from 'vue-router';
+let $route = useRoute();
+let $router = useRouter();
+
+
+//如果有参数的话，可以使用query
+const changeActive = (path: string) => {
+    $router.push({ path, query: {} })
+}
 </script>
 
 <style lang="scss">
