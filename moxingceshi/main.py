@@ -177,7 +177,7 @@ transform = transforms.Compose([
 # 1. 加载最佳模型
 model = DenseNet(growth_rate=32, block_config=(6, 12, 24, 16), compression=0.5,
                  num_init_features=64, bn_size=4, drop_rate=0.2, num_classes=4, efficient=True)
-model.load_state_dict(torch.load('./best_model.pth', map_location=device))
+model.load_state_dict(torch.load('moxingceshi/best_model.pth', map_location=device))
 model.to(device)
 model.eval()  # 设置为评估模式
 feature_maps = []
@@ -191,7 +191,7 @@ def get_feature_map(name):
 hook_handle = model.features[0].register_forward_hook(get_feature_map('conv0'))
 
 # 3. 读取待测试的图片并处理
-image_path = './pt.jpg'  # 替换为你的图片路径
+image_path = 'input/pt.jpg'  # 替换为你的图片路径
 image = Image.open(image_path).convert('RGB')
 image = transform(image).unsqueeze(0).to(device)  # 添加batch维度并转移到GPU
 
@@ -221,7 +221,7 @@ for i, fmap in enumerate(feature_maps):
         plt.axis('off')
         plt.title(f'Channel {j + 1}')
     plt.tight_layout()
-    plt.savefig(f'feature_map_layer_{i}.png')
+    plt.savefig(f'output/feature_map_layer_{i}.png')
     plt.close()
 
 # 6. 创建柱状图表示每个类的概率并保存
@@ -233,10 +233,10 @@ plt.xlabel('Classes')
 plt.ylabel('Probability')
 plt.ylim(0, 1)
 plt.grid(axis='y')
-plt.savefig('class_probabilities.png')
+plt.savefig('output/class_probabilities.png')
 plt.show()
 
-with open('prediction_result.txt', 'w') as f:
+with open('output/prediction_result.txt', 'w') as f:
     f.write(f'Predicted Class: {class_labels[predicted_class]}\n')
     f.write('Class Probabilities:\n')
     for label, prob in zip(class_labels, probabilities.cpu().numpy()[0]):

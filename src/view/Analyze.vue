@@ -14,7 +14,7 @@ onMounted(() => {
     // 绘制图表
     myChart.setOption({
         title: {
-            text: '阿兹海默病诊断'
+            // text: '阿兹海默病诊断'
         },
         tooltip: {},
         xAxis: {
