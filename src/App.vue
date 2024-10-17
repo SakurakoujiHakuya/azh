@@ -25,14 +25,15 @@ import functionMenu from './components/functionMenu.vue';
 .container {
   // margin: 10px;
   display: flex;
-  background-color: rgb(29, 34, 56);
+  // background-color: rgb(29, 34, 56);
+  background-color: beige;
   width: 100vw;
   height: 100vh;
 
   .menu {
     height: 100%;
     flex: 2;
-    margin: 0 0.5%;
+    // margin: 0 0.5%;
   }
 
   .right {

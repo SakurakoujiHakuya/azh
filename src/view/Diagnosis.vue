@@ -6,7 +6,7 @@
                 <img v-show="imageUrls.length > 0" :src="imageUrls[currentIndex]" alt="Uploaded Image" />
             </div>
             <div class="image-wrapper">
-                <img v-show="imageUrls.length > 0" :src="imageUrls[currentIndex]" alt="Mirrored Image"
+                <img v-show="imageUrls.length > 0" src="../assets/feature_map_layer_0.png" alt="Mirrored Image"
                     class="post-diagnosis" />
             </div>
         </div>
@@ -79,16 +79,18 @@ const nextImage = () => {
             /* 防止出现滚动条 */
 
             img {
-                max-width: 95%;
-                max-height: 95%;
+                max-width: 90%;
+                max-height: 90%;
+                min-height: 90%;
+                min-width: 90%;
                 object-fit: contain;
                 /* 保持图片的纵横比 */
             }
 
-            .post-diagnosis {
-                margin-left: 5px;
-                transform: scaleX(-1);
-            }
+            // .post-diagnosis {
+            //     margin-left: 5px;
+            //     transform: scaleX(-1);
+            // }
         }
     }
 

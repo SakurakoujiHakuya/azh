@@ -11,7 +11,8 @@
 
 <style lang="scss" scoped>
 .topbar {
-    background-color: rgb(54, 65, 65);
+    // background-color: rgb(54, 65, 65);
+    background-color: gray;
     height: 10vh;
     padding: 0 5vw;
     display: flex;
