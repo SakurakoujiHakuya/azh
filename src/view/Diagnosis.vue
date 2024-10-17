@@ -6,7 +6,7 @@
                 <img v-show="imageUrls.length > 0" :src="imageUrls[currentIndex]" alt="Uploaded Image" />
             </div>
             <div class="image-wrapper">
-                <img v-show="imageUrls.length > 0" src="../assets/feature_map_layer_0.png" alt="Mirrored Image"
+                <img v-show="imageUrls.length > 0" src="../assets/feature_map_layer_0.png" alt="检测结果图像"
                     class="post-diagnosis" />
             </div>
         </div>
