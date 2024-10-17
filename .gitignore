@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+output/class_probabilities.png
+output/feature_map_layer_0.png
+input/pt.jpg
