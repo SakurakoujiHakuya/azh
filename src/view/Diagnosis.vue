@@ -6,8 +6,7 @@
                 <img v-show="imageUrls.length > 0" :src="imageUrls[currentIndex]" alt="Uploaded Image" />
             </div>
             <div class="image-wrapper">
-                <img v-show="imageUrls.length > 0" src="../assets/feature_map_layer_0.png" alt="检测结果图像"
-                    class="post-diagnosis" />
+                <img v-show="imageUrls.length > 0" :src="diagnosisImageUrl" alt="检测结果图像" class="post-diagnosis" />
             </div>
         </div>
         <div class="eventButton">
@@ -17,22 +16,34 @@
             </div>
             <button class="upload-button" @click="triggerFileUpload">选择图像</button>
         </div>
-
     </div>
 </template>
 
 <script setup lang='ts'>
 import { ref } from 'vue';
+import axios from 'axios';
 
 const imageUrls = ref<string[]>([]);
 const currentIndex = ref(0);
 const fileInput = ref<HTMLInputElement | null>(null);
+const diagnosisImageUrl = ref<string | null>(null);
 
-const onFileChange = (event: Event) => {
+const onFileChange = async (event: Event) => {
     const files = (event.target as HTMLInputElement).files;
     if (files) {
         imageUrls.value = Array.from(files).map(file => URL.createObjectURL(file));
         currentIndex.value = 0;
+
+        // 上传图片并保存到服务器
+        const formData = new FormData();
+        formData.append('file', files[0], 'pt.jpg');
+        await axios.post('/upload', formData);
+
+        // 运行 Python 脚本
+        await axios.post('/run-script');
+
+        // 更新右侧的图片
+        diagnosisImageUrl.value = '/output/feature_map_layer_0.png';
     }
 };
 
@@ -65,8 +76,6 @@ const nextImage = () => {
     .images-container {
         width: 100%;
         height: 85%;
-        // background-color: yellow;
-        // margin-top: 20px;
         display: flex;
         justify-content: space-around;
 
@@ -76,7 +85,6 @@ const nextImage = () => {
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            /* 防止出现滚动条 */
 
             img {
                 max-width: 90%;
@@ -84,13 +92,7 @@ const nextImage = () => {
                 min-height: 90%;
                 min-width: 90%;
                 object-fit: contain;
-                /* 保持图片的纵横比 */
             }
-
-            // .post-diagnosis {
-            //     margin-left: 5px;
-            //     transform: scaleX(-1);
-            // }
         }
     }
 
@@ -101,14 +103,10 @@ const nextImage = () => {
         display: flex;
         flex-direction: column;
         align-items: center;
-        // justify-content: space-between;
-        // background-color: pink;
 
         .upload-button {
             margin-top: 7vh;
             width: 25%;
-            // background-color: blue;
-            // color: white;
             background-color: skyblue;
             cursor: pointer;
             border-radius: 5px;
@@ -131,14 +129,10 @@ const nextImage = () => {
 
             button {
                 background-color: skyblue;
-
                 margin-right: 2vh;
                 text-align: center;
                 border-radius: 5px;
                 padding: 0.6vh 1.4vh;
-                /* 调整 padding 以增加按钮内部的空隙 */
-                // line-height: 2.5vh;
-                /* 确保文字垂直居中 */
             }
 
             button:hover {
@@ -147,7 +141,5 @@ const nextImage = () => {
             }
         }
     }
-
-
 }
 </style>

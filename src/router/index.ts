@@ -9,7 +9,7 @@ import Setting from '../view/Setting.vue';
 const routes = [
     {
         path: '/',
-        redirect: '/home' // 设置默认路由(home还没做)
+        redirect: '/diagnosis' // 设置默认路由(home还没做)
     },
     {
         path: '/analyze',
