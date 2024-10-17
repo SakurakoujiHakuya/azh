@@ -3,14 +3,16 @@
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
-                <img v-show="imageUrls.length > 0" :src="imageUrls[currentIndex]" alt="Uploaded Image"
-                    v-if="DiagnosisStore.orignImg === ''" />
-                <img :src="DiagnosisStore.orignImg" alt="Uploaded Image" v-else />
+                <img v-show="imageUrls.length > 0" :src="imageUrls[currentIndex]" alt="Uploaded Image" />
+                <!-- <img v-show="imageUrls.length > 0" :src="imageUrls[currentIndex]" alt="Uploaded Image"
+                    v-if="DiagnosisStore.orignImg === ''" /> -->
+                <!-- <img :src="DiagnosisStore.orignImg" alt="Uploaded Image" v-else /> -->
             </div>
             <div class="image-wrapper">
-                <img v-show="imageUrls.length > 0" :src="diagnosisImageUrl" alt="检测结果图像" class="post-diagnosis"
+                <img v-show="imageUrls.length > 0" :src="diagnosisImageUrl" alt="检测结果图像" class="post-diagnosis" />
+                <!-- <img v-show="imageUrls.length > 0" :src="diagnosisImageUrl" alt="检测结果图像" class="post-diagnosis"
                     v-if="DiagnosisStore.diagnosisImg === ''" />
-                <img :src="DiagnosisStore.diagnosisImg" alt="检测结果图像" class="post-diagnosis" v-else />
+                <img :src="DiagnosisStore.diagnosisImg" alt="检测结果图像" class="post-diagnosis" v-else /> -->
             </div>
         </div>
         <div class="eventButton">
@@ -27,8 +29,8 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { onMounted } from 'vue';
-import useDiagnosisStore from '../store/diagnosis';
-const DiagnosisStore = useDiagnosisStore();
+// import useDiagnosisStore from '../store/diagnosis';
+// const DiagnosisStore = useDiagnosisStore();
 
 
 const imageUrls = ref<string[]>([]);
@@ -53,7 +55,7 @@ const onFileChange = async (event: Event) => {
         // 更新右侧的图片
         diagnosisImageUrl.value = '/output/feature_map_layer_0.png';
 
-        DiagnosisStore.saveImg(imageUrls.value[0], diagnosisImageUrl.value);
+        // DiagnosisStore.saveImg(imageUrls.value[0], diagnosisImageUrl.value);
 
     }
 };
