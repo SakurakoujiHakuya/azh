@@ -14,6 +14,10 @@
         <div class="eventButton">
             <button class="upload-button" @click="triggerFileUpload">选择图像</button>
         </div>
+        <div v-if="isLoading" class="loading-overlay">
+            <div class="spinner"></div>
+            <p>正在处理，请稍候...</p>
+        </div>
     </div>
 </template>
 
@@ -24,14 +28,16 @@ import axios from 'axios';
 const imageUrls = ref<string>(localStorage.getItem('imageUrls') || '');
 const fileInput = ref<HTMLInputElement | null>(null);
 const diagnosisImageUrl = ref<string | null>(localStorage.getItem('diagnosisImageUrl'));
+const isLoading = ref<boolean>(false);
 
 const onFileChange = async (event: Event) => {
     const files = (event.target as HTMLInputElement).files;
     if (files && files.length > 0) {
+        isLoading.value = true; // 开始加载
+
         // 将文件转换为 URL 并存储
         const file = files[0];
-        imageUrls.value = URL.createObjectURL(file);
-        localStorage.setItem('imageUrls', imageUrls.value);
+        // imageUrls.value = URL.createObjectURL(file);
 
         // 上传图片并保存到服务器
         const formData = new FormData();
@@ -41,9 +47,15 @@ const onFileChange = async (event: Event) => {
         // 运行 Python 脚本
         await axios.post('/run-script');
 
+        //这里是因为上传的图片会重命名为pt.jpg保存在/input下
+        imageUrls.value = '/input/pt.jpg'
+        localStorage.setItem('imageUrls', imageUrls.value);
+
         // 更新右侧的图片
         diagnosisImageUrl.value = '/output/feature_map_layer_0.png';
         localStorage.setItem('diagnosisImageUrl', diagnosisImageUrl.value);
+
+        window.location.reload(); // 刷新页面
     }
 };
 
@@ -139,6 +151,40 @@ onMounted(() => {
         .upload-button:hover {
             color: white;
             background-color: green;
+        }
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        color: white;
+    }
+
+    .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top: 4px solid white;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
         }
     }
 }
