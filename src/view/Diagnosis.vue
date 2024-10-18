@@ -116,8 +116,10 @@ onMounted(() => {
 
             button {
                 margin-top: 10px;
-                padding: 5px 10px;
-                background-color: skyblue;
+                padding: 15px 85px;
+                // background-color: skyblue;
+                background-color: rgb(84, 92, 100);
+                color: white;
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
@@ -141,7 +143,9 @@ onMounted(() => {
         .upload-button {
             margin-top: 7vh;
             width: 25%;
-            background-color: skyblue;
+            // background-color: skyblue;
+            background-color: rgb(84, 92, 100);
+            color: white;
             cursor: pointer;
             border-radius: 5px;
             position: absolute;

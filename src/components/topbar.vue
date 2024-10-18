@@ -1,6 +1,6 @@
 <template>
     <div class="topbar">
-        <span>用户：xxx</span>
+        <span>用户：管理员</span>
         <img src="../assets/b_b8629520d4d314acb71cb637c0474dde.jpg" alt="">
     </div>
 </template>
