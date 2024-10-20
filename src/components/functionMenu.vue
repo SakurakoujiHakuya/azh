@@ -3,21 +3,21 @@
         <el-col>
             <el-menu active-text-color="#ffd04b" background-color="#545c64" class="el-menu-vertical-demo"
                 :default-active="$route.path" text-color="#fff">
-                <el-menu-item index="/diagnosis" @click="changeActive('/diagnosis')">
+                <el-menu-item index="/mainBoard/diagnosis" @click="changeActive('/mainBoard/diagnosis')">
                     <el-icon>
                         <Search />
                     </el-icon>
                     <span>诊断</span>
                 </el-menu-item>
 
-                <el-menu-item index="/analyze" @click="changeActive('/analyze')">
+                <el-menu-item index="/mainBoard/analyze" @click="changeActive('/mainBoard/analyze')">
                     <el-icon>
                         <ChatLineSquare />
                     </el-icon>
                     <span>结果分析</span>
                 </el-menu-item>
 
-                <el-menu-item index="/encipher" @click="changeActive('/encipher')">
+                <el-menu-item index="/mainBoard/encipher" @click="changeActive('/mainBoard/encipher')">
                     <el-icon>
                         <Lock />
                     </el-icon>
@@ -25,7 +25,7 @@
                 </el-menu-item>
 
 
-                <el-menu-item index="/decrypt" @click="changeActive('/decrypt')">
+                <el-menu-item index="/mainBoard/decrypt" @click="changeActive('/mainBoard/decrypt')">
                     <el-icon>
                         <Unlock />
                     </el-icon>
@@ -33,14 +33,14 @@
                 </el-menu-item>
 
 
-                <el-menu-item index="/security" @click="changeActive('/security')">
+                <el-menu-item index="/mainBoard/security" @click="changeActive('/mainBoard/security')">
                     <el-icon>
                         <Aim />
                     </el-icon>
                     <span>安全性分析</span>
                 </el-menu-item>
 
-                <el-menu-item index="/setting" @click="changeActive('/setting')">
+                <el-menu-item index="/mainBoard/setting" @click="changeActive('/mainBoard/setting')">
                     <el-icon>
                         <setting />
                     </el-icon>

@@ -5,35 +5,43 @@ import Diagnosis from '../view/Diagnosis.vue';
 import Encipher from '../view/Encipher.vue';
 import Security from '../view/Security.vue';
 import Setting from '../view/Setting.vue';
+import Login from "../view/Login.vue";
+import MainBoard from "../view/MainBoard.vue";
 
 const routes = [
     {
         path: '/',
-        redirect: '/diagnosis' // 设置默认路由(home还没做)
+        component: Login
     },
     {
-        path: '/analyze',
-        component: Analyze
-    },
-    {
-        path: '/decrypt',
-        component: Decrypt
-    },
-    {
-        path: '/diagnosis',
-        component: Diagnosis
-    },
-    {
-        path: '/encipher',
-        component: Encipher
-    },
-    {
-        path: '/security',
-        component: Security
-    },
-    {
-        path: '/setting',
-        component: Setting
+        path: '/mainBoard',
+        component: MainBoard,
+        children: [
+            {
+                path: 'analyze',
+                component: Analyze
+            },
+            {
+                path: 'decrypt',
+                component: Decrypt
+            },
+            {
+                path: 'diagnosis',
+                component: Diagnosis
+            },
+            {
+                path: 'encipher',
+                component: Encipher
+            },
+            {
+                path: 'security',
+                component: Security
+            },
+            {
+                path: 'setting',
+                component: Setting
+            },
+        ]
     }
 ];
 
