@@ -3,11 +3,11 @@
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
-                <img v-show="imageUrls !== ''" :src="imageUrls" alt="Uploaded Image" />
+                <img v-show="imageUrls !== ''" src="../assets/jiami.jpg" alt="Uploaded Image" />
                 <button v-show="imageUrls !== ''" @click="openImage(imageUrls)">打开图片</button>
             </div>
             <div class="image-wrapper">
-                <img v-show="diagnosisImageUrl !== null" :src="diagnosisImageUrl" alt="检测结果图像" class="post-diagnosis" />
+                <img v-show="diagnosisImageUrl !== null" :src="imageUrls" alt="检测结果图像" class="post-diagnosis" />
                 <button v-show="diagnosisImageUrl !== null" @click="openImage(diagnosisImageUrl)">打开图片</button>
             </div>
         </div>
@@ -49,11 +49,11 @@ const onFileChange = async (event: Event) => {
 
         //这里是因为上传的图片会重命名为pt.jpg保存在/input下
         imageUrls.value = '/input/pt.jpg'
-        localStorage.setItem('imageUrls', imageUrls.value);
+        // localStorage.setItem('imageUrls', imageUrls.value);
 
         // 更新右侧的图片
-        diagnosisImageUrl.value = '/output/feature_map_layer_0.png';
-        localStorage.setItem('diagnosisImageUrl', diagnosisImageUrl.value);
+        diagnosisImageUrl.value = '/output/jiemi.jpg';
+        // localStorage.setItem('diagnosisImageUrl', diagnosisImageUrl.value);
 
         window.location.reload(); // 刷新页面
     }
@@ -69,18 +69,18 @@ const openImage = (url: string | null) => {
     }
 };
 
-onMounted(() => {
-    // 从本地存储加载图片 URL
-    const storedImageUrls = localStorage.getItem('imageUrls');
-    if (storedImageUrls) {
-        imageUrls.value = storedImageUrls;
-    }
+// onMounted(() => {
+//     // 从本地存储加载图片 URL
+//     const storedImageUrls = localStorage.getItem('imageUrls');
+//     if (storedImageUrls) {
+//         imageUrls.value = storedImageUrls;
+//     }
 
-    const storedDiagnosisImageUrl = localStorage.getItem('diagnosisImageUrl');
-    if (storedDiagnosisImageUrl) {
-        diagnosisImageUrl.value = storedDiagnosisImageUrl;
-    }
-});
+//     const storedDiagnosisImageUrl = localStorage.getItem('diagnosisImageUrl');
+//     if (storedDiagnosisImageUrl) {
+//         diagnosisImageUrl.value = storedDiagnosisImageUrl;
+//     }
+// });
 </script>
 
 <style lang="scss" scoped>

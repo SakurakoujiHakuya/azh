@@ -69,7 +69,8 @@ def encryption(image, key):
     return image
 
 # 读取图像并加密保存
-image = Image.open("input/pt.jpg")
+image = Image.open("input/pt.jpg").convert("RGB")
+image_array = np.array(image)
 key = "0.1, 0.2"
-encrypted_image = encryption(image)
+encrypted_image = encryption(image_array,key)
 encrypted_image.save("output/jiami.jpg")

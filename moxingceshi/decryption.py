@@ -32,7 +32,9 @@ def getk1_k2(x, y, dot, left, right, H, W, mark):
     return k1, k2
 
 def decryption(image, key):
-    H, W = image.shape[:2]  # 获取图片的高度和宽度
+    image = np.array(image)
+    H, W = image.shape[:2]
+    
     key = key.replace(" ", "").split(",")
     x_value = float(key[0])
     y_value = float(key[1])
@@ -42,8 +44,7 @@ def decryption(image, key):
     x, y = getx_y(dot, Max, x_value, y_value)
 
     mark = True if H < W else False
-    k1, k2 = getk1_k2(x, y, dot, 0, W, H, W, not mark)
-    image = np.array(image)
+    k1, k2 = getk1_k2(x, y, dot, 0, W, H, W, mark)
 
     # 逆扩散
     image_tmp = np.zeros((H * W * 3), dtype=np.uint8)
@@ -71,22 +72,23 @@ def decryption(image, key):
     k1, k2 = getk1_k2(x, y, dot, 0, W, H, W, mark)
 
     # 行解密
+# 行解密
     for n in range(H):
         for i in range(3):
-            buffer = image[n, 1:W - k2[n], i].copy()
-            image[n, 1:1 + k2[n], i] = image[n, W - k2[n] + 1:W, i]
-            image[n, 1 + k2[n]:W, i] = buffer
+            buffer = image[n, W - k2[n]:W, i].copy()
+            image[n, k2[n]:W, i] = image[n, 0:W - k2[n], i]
+            image[n, 0:k2[n], i] = buffer
 
-            # 行反混乱
+        # 行反混乱
         for i in range(3):
             image[n, 0:W, i] = np.bitwise_xor(image[n, 0:W, i], k1[n])
 
-        image = Image.fromarray(np.uint8(image))
-        return image
+    image = Image.fromarray(np.uint8(image))
+    return image
 
     # 读取图像并解密保存
-    image = Image.open("input/pt.jpg")
-    key = "0.1, 0.2"
-    decrypted_image = decryption(image, key)
-    decrypted_image.save("output/jiemi.jpg")
+image = Image.open("output/jiami.jpg").convert("RGB")
+key = "0.1, 0.2"
+decrypted_image = decryption(image, key)
+decrypted_image.save("output/jiemi.jpg")
 

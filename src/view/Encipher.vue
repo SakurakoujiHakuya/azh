@@ -3,12 +3,12 @@
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
-                <img v-show="imageUrls !== ''" :src="imageUrls" alt="Uploaded Image" />
-                <button v-show="imageUrls !== ''" @click="openImage(imageUrls)">打开图片</button>
+                <img v-show="beforeEncipher !== ''" :src="beforeEncipher" alt="Uploaded Image" />
+                <button v-show="beforeEncipher !== ''" @click="openImage(beforeEncipher)">打开图片</button>
             </div>
             <div class="image-wrapper">
-                <img v-show="diagnosisImageUrl !== null" :src="diagnosisImageUrl" alt="检测结果图像" class="post-diagnosis" />
-                <button v-show="diagnosisImageUrl !== null" @click="openImage(diagnosisImageUrl)">打开图片</button>
+                <img v-show="EncipherImageUrl !== null" :src="EncipherImageUrl" alt="检测结果图像" class="post-diagnosis" />
+                <button v-show="EncipherImageUrl !== null" @click="openImage(EncipherImageUrl)">打开图片</button>
             </div>
         </div>
         <div class="eventButton">
@@ -25,9 +25,9 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-const imageUrls = ref<string>(localStorage.getItem('imageUrls') || '');
+const beforeEncipher = ref<string>('');
 const fileInput = ref<HTMLInputElement | null>(null);
-const diagnosisImageUrl = ref<string | null>(localStorage.getItem('diagnosisImageUrl'));
+const EncipherImageUrl = ref<string | null>(null);
 const isLoading = ref<boolean>(false);
 
 const onFileChange = async (event: Event) => {
@@ -48,12 +48,12 @@ const onFileChange = async (event: Event) => {
         await axios.post('/run-script');
 
         //这里是因为上传的图片会重命名为pt.jpg保存在/input下
-        imageUrls.value = '/input/pt.jpg'
-        localStorage.setItem('imageUrls', imageUrls.value);
+        beforeEncipher.value = '/input/pt.jpg'
+        localStorage.setItem('beforeEncipher', beforeEncipher.value);
 
         // 更新右侧的图片
-        diagnosisImageUrl.value = '/output/feature_map_layer_0.png';
-        localStorage.setItem('diagnosisImageUrl', diagnosisImageUrl.value);
+        EncipherImageUrl.value = '/output/jiami.jpg';
+        localStorage.setItem('EncipherImageUrl', EncipherImageUrl.value);
 
         window.location.reload(); // 刷新页面
     }
@@ -71,14 +71,14 @@ const openImage = (url: string | null) => {
 
 onMounted(() => {
     // 从本地存储加载图片 URL
-    const storedImageUrls = localStorage.getItem('imageUrls');
+    const storedImageUrls = localStorage.getItem('beforeEncipher');
     if (storedImageUrls) {
-        imageUrls.value = storedImageUrls;
+        beforeEncipher.value = storedImageUrls;
     }
 
-    const storedDiagnosisImageUrl = localStorage.getItem('diagnosisImageUrl');
-    if (storedDiagnosisImageUrl) {
-        diagnosisImageUrl.value = storedDiagnosisImageUrl;
+    const storedEncipherImageUrl = localStorage.getItem('EncipherImageUrl');
+    if (storedEncipherImageUrl) {
+        EncipherImageUrl.value = storedEncipherImageUrl;
     }
 });
 </script>
