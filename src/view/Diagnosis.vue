@@ -42,7 +42,7 @@ const onFileChange = async (event: Event) => {
         // 上传图片并保存到服务器
         const formData = new FormData();
         formData.append('file', file, 'pt.jpg');
-        await axios.post('/upload', formData);
+        await axios.post('/upload-diagnosis', formData);
 
         // 运行 Python 脚本
         await axios.post('/run-script');

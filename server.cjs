@@ -7,7 +7,7 @@ const app = express();
 const port = 3000;
 
 // 设置 multer 用于处理文件上传
-const storage = multer.diskStorage({
+const storageDiagnosis = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'input');
     },
@@ -15,10 +15,39 @@ const storage = multer.diskStorage({
         cb(null, 'pt.jpg');
     }
 });
-const upload = multer({ storage: storage });
+
+const storageEncipher = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'input');
+    },
+    filename: (req, file, cb) => {
+        cb(null, 'pt2.bmp');
+    }
+});
+
+const storageDecrypt = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'input');
+    },
+    filename: (req, file, cb) => {
+        cb(null, 'pt3.bmp');
+    }
+});
+
+const uploadDiagnosis = multer({ storage: storageDiagnosis });
+const uploadEncipher = multer({ storage: storageEncipher });
+const uploadDecrypt = multer({ storage: storageDecrypt });
 
 // 上传图片的路由
-app.post('/upload', upload.single('file'), (req, res) => {
+app.post('/upload-diagnosis', uploadDiagnosis.single('file'), (req, res) => {
+    res.send('文件上传成功');
+});
+
+app.post('/upload-encipher', uploadEncipher.single('file'), (req, res) => {
+    res.send('文件上传成功');
+});
+
+app.post('/upload-decrypt', uploadDecrypt.single('file'), (req, res) => {
     res.send('文件上传成功');
 });
 
