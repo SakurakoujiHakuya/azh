@@ -1,5 +1,5 @@
 <template>
-    <div class="diagnosis">
+    <div class="encipher">
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
@@ -7,8 +7,8 @@
                 <button v-show="beforeEncipher !== ''" @click="openImage(beforeEncipher)">打开图片</button>
             </div>
             <div class="image-wrapper">
-                <img v-show="EncipherImageUrl !== null" :src="EncipherImageUrl" alt="检测结果图像" class="post-diagnosis" />
-                <button v-show="EncipherImageUrl !== null" @click="openImage(EncipherImageUrl)">打开图片</button>
+                <img v-show="encipherImageUrl !== null" :src="encipherImageUrl" alt="加密结果图像" class="post-encipher" />
+                <button v-show="encipherImageUrl !== null" @click="openImage(encipherImageUrl)">打开图片</button>
             </div>
         </div>
         <div class="eventButton">
@@ -25,9 +25,9 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-const beforeEncipher = ref<string>('');
+const beforeEncipher = ref<string>(localStorage.getItem('beforeEncipher') || '');
 const fileInput = ref<HTMLInputElement | null>(null);
-const EncipherImageUrl = ref<string | null>(null);
+const encipherImageUrl = ref<string | null>(localStorage.getItem('encipherImageUrl'));
 const isLoading = ref<boolean>(false);
 
 const onFileChange = async (event: Event) => {
@@ -37,23 +37,23 @@ const onFileChange = async (event: Event) => {
 
         // 将文件转换为 URL 并存储
         const file = files[0];
-        // imageUrls.value = URL.createObjectURL(file);
+        // beforeEncipher.value = URL.createObjectURL(file);
 
         // 上传图片并保存到服务器
         const formData = new FormData();
-        formData.append('file', file, 'pt.jpg');
-        await axios.post('/upload', formData);
+        formData.append('file', file, 'pt2.bmp');
+        await axios.post('/upload-encipher', formData);
 
         // 运行 Python 脚本
-        await axios.post('/run-script');
+        await axios.post('/run-script-en');
 
-        //这里是因为上传的图片会重命名为pt.jpg保存在/input下
-        beforeEncipher.value = '/input/pt.jpg'
+        //这里是因为上传的图片会重命名为pt2.bmp保存在/input下
+        beforeEncipher.value = '/input/pt2.bmp'
         localStorage.setItem('beforeEncipher', beforeEncipher.value);
 
         // 更新右侧的图片
-        EncipherImageUrl.value = '/output/jiami.jpg';
-        localStorage.setItem('EncipherImageUrl', EncipherImageUrl.value);
+        encipherImageUrl.value = '/output/jiami.bmp';
+        localStorage.setItem('encipherImageUrl', encipherImageUrl.value);
 
         window.location.reload(); // 刷新页面
     }
@@ -71,20 +71,20 @@ const openImage = (url: string | null) => {
 
 onMounted(() => {
     // 从本地存储加载图片 URL
-    const storedImageUrls = localStorage.getItem('beforeEncipher');
-    if (storedImageUrls) {
-        beforeEncipher.value = storedImageUrls;
+    const storedBeforeEncipher = localStorage.getItem('beforeEncipher');
+    if (storedBeforeEncipher) {
+        beforeEncipher.value = storedBeforeEncipher;
     }
 
-    const storedEncipherImageUrl = localStorage.getItem('EncipherImageUrl');
+    const storedEncipherImageUrl = localStorage.getItem('encipherImageUrl');
     if (storedEncipherImageUrl) {
-        EncipherImageUrl.value = storedEncipherImageUrl;
+        encipherImageUrl.value = storedEncipherImageUrl;
     }
 });
 </script>
 
 <style lang="scss" scoped>
-.diagnosis {
+.encipher {
     height: 100%;
     width: 100%;
     display: flex;

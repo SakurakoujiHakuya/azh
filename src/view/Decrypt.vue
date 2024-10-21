@@ -1,14 +1,14 @@
 <template>
-    <div class="diagnosis">
+    <div class="decrypt">
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
-                <img v-show="imageUrls !== ''" src="../assets/jiami.jpg" alt="Uploaded Image" />
-                <button v-show="imageUrls !== ''" @click="openImage(imageUrls)">打开图片</button>
+                <img v-show="beforeDecrypt !== ''" :src="beforeDecrypt" alt="Uploaded Image" />
+                <button v-show="beforeDecrypt !== ''" @click="openImage(beforeDecrypt)">打开图片</button>
             </div>
             <div class="image-wrapper">
-                <img v-show="diagnosisImageUrl !== null" :src="imageUrls" alt="检测结果图像" class="post-diagnosis" />
-                <button v-show="diagnosisImageUrl !== null" @click="openImage(diagnosisImageUrl)">打开图片</button>
+                <img v-show="decryptImageUrl !== null" :src="decryptImageUrl" alt="解密结果图像" class="post-decrypt" />
+                <button v-show="decryptImageUrl !== null" @click="openImage(decryptImageUrl)">打开图片</button>
             </div>
         </div>
         <div class="eventButton">
@@ -25,9 +25,9 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-const imageUrls = ref<string>(localStorage.getItem('imageUrls') || '');
+const beforeDecrypt = ref<string>(localStorage.getItem('beforeDecrypt') || '');
 const fileInput = ref<HTMLInputElement | null>(null);
-const diagnosisImageUrl = ref<string | null>(localStorage.getItem('diagnosisImageUrl'));
+const decryptImageUrl = ref<string | null>(localStorage.getItem('decryptImageUrl'));
 const isLoading = ref<boolean>(false);
 
 const onFileChange = async (event: Event) => {
@@ -37,23 +37,23 @@ const onFileChange = async (event: Event) => {
 
         // 将文件转换为 URL 并存储
         const file = files[0];
-        // imageUrls.value = URL.createObjectURL(file);
+        // beforeDecrypt.value = URL.createObjectURL(file);
 
         // 上传图片并保存到服务器
         const formData = new FormData();
-        formData.append('file', file, 'pt.jpg');
-        await axios.post('/upload', formData);
+        formData.append('file', file, 'pt3.bmp');
+        await axios.post('/upload-decrypt', formData);
 
         // 运行 Python 脚本
-        await axios.post('/run-script');
+        await axios.post('/run-script-de');
 
-        //这里是因为上传的图片会重命名为pt.jpg保存在/input下
-        imageUrls.value = '/input/pt.jpg'
-        // localStorage.setItem('imageUrls', imageUrls.value);
+        //这里是因为上传的图片会重命名为pt3.bmp保存在/input下
+        beforeDecrypt.value = '/input/pt3.bmp'
+        localStorage.setItem('beforeDecrypt', beforeDecrypt.value);
 
         // 更新右侧的图片
-        diagnosisImageUrl.value = '/output/jiemi.jpg';
-        // localStorage.setItem('diagnosisImageUrl', diagnosisImageUrl.value);
+        decryptImageUrl.value = '/output/jiemi.bmp';
+        localStorage.setItem('decryptImageUrl', decryptImageUrl.value);
 
         window.location.reload(); // 刷新页面
     }
@@ -69,22 +69,22 @@ const openImage = (url: string | null) => {
     }
 };
 
-// onMounted(() => {
-//     // 从本地存储加载图片 URL
-//     const storedImageUrls = localStorage.getItem('imageUrls');
-//     if (storedImageUrls) {
-//         imageUrls.value = storedImageUrls;
-//     }
+onMounted(() => {
+    // 从本地存储加载图片 URL
+    const storedBeforeDecrypt = localStorage.getItem('beforeDecrypt');
+    if (storedBeforeDecrypt) {
+        beforeDecrypt.value = storedBeforeDecrypt;
+    }
 
-//     const storedDiagnosisImageUrl = localStorage.getItem('diagnosisImageUrl');
-//     if (storedDiagnosisImageUrl) {
-//         diagnosisImageUrl.value = storedDiagnosisImageUrl;
-//     }
-// });
+    const storedDecryptImageUrl = localStorage.getItem('decryptImageUrl');
+    if (storedDecryptImageUrl) {
+        decryptImageUrl.value = storedDecryptImageUrl;
+    }
+});
 </script>
 
 <style lang="scss" scoped>
-.diagnosis {
+.decrypt {
     height: 100%;
     width: 100%;
     display: flex;
