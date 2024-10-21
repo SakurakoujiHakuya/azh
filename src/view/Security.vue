@@ -74,11 +74,11 @@ onMounted(() => {
             overflow: hidden;
 
             img {
-                max-width: 90%;
-                max-height: 90%;
-                min-height: 90%;
-                min-width: 90%;
-                object-fit: contain;
+                max-width: 95%;
+                max-height: 95%;
+                min-height: 95%;
+                min-width: 95%;
+                // object-fit: contain;
             }
 
             button {
