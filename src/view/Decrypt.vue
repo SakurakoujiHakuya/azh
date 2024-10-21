@@ -40,7 +40,7 @@ const isLoading = ref<boolean>(false);
 const onFileChange = async (event: Event) => {
     const files = (event.target as HTMLInputElement).files;
     if (files && files.length > 0) {
-        showMydialog();
+        await showDialogAndWait();
         isLoading.value = true; // 开始加载
 
         // 将文件转换为 URL 并存储
@@ -70,6 +70,19 @@ const onFileChange = async (event: Event) => {
 
         window.location.reload(); // 刷新页面
     }
+};
+import { watch } from 'vue';
+
+const showDialogAndWait = () => {
+    return new Promise<void>((resolve) => {
+        DialogStore.visiable = true;
+        const unwatch = watch(() => DialogStore.visiable, (newVal) => {
+            if (!newVal) {
+                unwatch();
+                resolve();
+            }
+        });
+    });
 };
 
 const triggerFileUpload = () => {

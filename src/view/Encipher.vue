@@ -27,45 +27,66 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import useDialogStore from '../store/dialog';
 import MyDialog from '../components/myDialog.vue';
+
 const DialogStore = useDialogStore();
 const showMydialog = () => {
-    DialogStore.visiable = true
-}
+    DialogStore.visiable = true;
+};
 
 const beforeEncipher = ref<string>(localStorage.getItem('beforeEncipher') || '');
 const fileInput = ref<HTMLInputElement | null>(null);
 const encipherImageUrl = ref<string | null>(localStorage.getItem('encipherImageUrl'));
 const isLoading = ref<boolean>(false);
 
+const generateUniqueFileName = (originalName: string) => {
+    const timestamp = new Date().getTime();
+    const extension = originalName.split('.').pop();
+    return `pt2_${timestamp}.${extension}`;
+};
+
 const onFileChange = async (event: Event) => {
     const files = (event.target as HTMLInputElement).files;
     if (files && files.length > 0) {
-        showMydialog();
-        // DialogStore.key = DialogStore.inputKey
+        // 显示对话框并等待关闭
+        await showDialogAndWait();
         isLoading.value = true; // 开始加载
 
-        // 将文件转换为 URL 并存储
         const file = files[0];
-        // beforeEncipher.value = URL.createObjectURL(file);
 
         // 上传图片并保存到服务器
         const formData = new FormData();
         formData.append('file', file, 'pt2.bmp');
         await axios.post('/upload-encipher', formData);
 
+
+
+
         // 运行 Python 脚本
         await axios.post('/run-script-en');
 
-        //这里是因为上传的图片会重命名为pt2.bmp保存在/input下
-        beforeEncipher.value = '/input/pt2.bmp'
+
+        beforeEncipher.value = '/input/pt2.bmp';
         localStorage.setItem('beforeEncipher', beforeEncipher.value);
 
         // 更新右侧的图片
         encipherImageUrl.value = '/output/jiami.bmp';
         localStorage.setItem('encipherImageUrl', encipherImageUrl.value);
-
         window.location.reload(); // 刷新页面
     }
+};
+
+import { watch } from 'vue';
+
+const showDialogAndWait = () => {
+    return new Promise<void>((resolve) => {
+        DialogStore.visiable = true;
+        const unwatch = watch(() => DialogStore.visiable, (newVal) => {
+            if (!newVal) {
+                unwatch();
+                resolve();
+            }
+        });
+    });
 };
 
 const triggerFileUpload = () => {
