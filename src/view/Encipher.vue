@@ -40,6 +40,8 @@ const isLoading = ref<boolean>(false);
 const onFileChange = async (event: Event) => {
     const files = (event.target as HTMLInputElement).files;
     if (files && files.length > 0) {
+        showMydialog();
+        // DialogStore.key = DialogStore.inputKey
         isLoading.value = true; // 开始加载
 
         // 将文件转换为 URL 并存储
@@ -50,8 +52,7 @@ const onFileChange = async (event: Event) => {
         const formData = new FormData();
         formData.append('file', file, 'pt2.bmp');
         await axios.post('/upload-encipher', formData);
-        showMydialog();
-        DialogStore.key = DialogStore.inputKey
+
         // 运行 Python 脚本
         await axios.post('/run-script-en');
 

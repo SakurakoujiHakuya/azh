@@ -40,6 +40,7 @@ const isLoading = ref<boolean>(false);
 const onFileChange = async (event: Event) => {
     const files = (event.target as HTMLInputElement).files;
     if (files && files.length > 0) {
+        showMydialog();
         isLoading.value = true; // 开始加载
 
         // 将文件转换为 URL 并存储
@@ -51,7 +52,7 @@ const onFileChange = async (event: Event) => {
         formData.append('file', file, 'pt3.bmp');
         await axios.post('/upload-decrypt', formData);
 
-        showMydialog();
+
         // 运行 Python 脚本
         await axios.post('/run-script-de');
 

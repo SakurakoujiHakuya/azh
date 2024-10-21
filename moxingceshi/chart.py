@@ -30,8 +30,13 @@ def create_histogram(image):
     return fig
 
 # 读取图像并生成直方图
-image = Image.open("output/jiami.bmp")
+image = Image.open("input/pt2.bmp")
 fig = create_histogram(image)
 fig.savefig("output/histogram.jpg")
 plt.close(fig)  # 关闭图形以释放内存
 
+
+image = Image.open("output/jiami.bmp")
+fig = create_histogram(image)
+fig.savefig("output/histogram2.jpg")
+plt.close(fig)  # 关闭图形以释放内存

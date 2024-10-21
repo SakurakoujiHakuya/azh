@@ -1,13 +1,13 @@
 <template>
     <div class="security">
-        <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" multiple />
+        <input type="file" ref="fileInput" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
-                <img v-show="imageUrls !== ''" src="../../output/jiami.bmp" alt="Uploaded Image" />
+                <img v-show="imageUrls !== ''" src="../../output/histogram.jpg" alt="Uploaded Image" />
                 <button v-show="imageUrls !== ''" @click="openImage('../../output/jiami.bmp')">打开图片</button>
             </div>
             <div class="image-wrapper">
-                <img v-show="diagnosisImageUrl !== null" src="../../output/histogram.jpg" alt="检测结果图像"
+                <img v-show="diagnosisImageUrl !== null" src="../../output/histogram2.jpg" alt="检测结果图像"
                     class="post-diagnosis" />
                 <button v-show="diagnosisImageUrl !== null"
                     @click="openImage('../../output/histogram.jpg')">打开图片</button>
