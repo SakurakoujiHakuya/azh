@@ -74,15 +74,15 @@ onMounted(() => {
             overflow: hidden;
 
             img {
-                max-width: 95%;
-                max-height: 95%;
-                min-height: 95%;
-                min-width: 95%;
+                max-width: 92%;
+                max-height: 92%;
+                min-height: 92%;
+                min-width: 92%;
                 // object-fit: contain;
             }
 
             button {
-                margin-top: 10px;
+                margin-top: 15px;
                 padding: 15px 85px;
                 // background-color: skyblue;
                 background-color: rgb(84, 92, 100);
@@ -96,32 +96,6 @@ onMounted(() => {
                 background-color: green;
                 color: white;
             }
-        }
-    }
-
-    .eventButton {
-        padding: 1%;
-        height: 15%;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        .upload-button {
-            margin-top: 7vh;
-            width: 25%;
-            // background-color: skyblue;
-            background-color: rgb(84, 92, 100);
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-            position: absolute;
-            font-size: 3vh;
-        }
-
-        .upload-button:hover {
-            color: white;
-            background-color: green;
         }
     }
 
