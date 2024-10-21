@@ -16,33 +16,13 @@
                     </el-icon>
                     <span>结果分析</span>
                 </el-menu-item>
-                <el-sub-menu>
-                    <template #title>
-                        <el-icon>
-                            <el-icon>
-                                <List />
-                            </el-icon>
-                        </el-icon>
-                        <span class="menuTitle">加密与安全性分析</span>
-                    </template>
-                    <el-menu-item-group>
-                        <el-menu-item index="/mainBoard/encipher" @click="changeActive('/mainBoard/encipher')"
-                            class="menuItem">
-                            <el-icon>
-                                <Lock />
-                            </el-icon>
-                            <span>加密</span>
-                        </el-menu-item>
 
-                        <el-menu-item index="/mainBoard/security" @click="changeActive('/mainBoard/security')"
-                            class="menuItem">
-                            <el-icon>
-                                <Aim />
-                            </el-icon>
-                            <span>安全性分析</span>
-                        </el-menu-item>
-                    </el-menu-item-group>
-                </el-sub-menu>
+                <el-menu-item index="/mainBoard/encipher" @click="changeActive('/mainBoard/encipher')">
+                    <el-icon>
+                        <Lock />
+                    </el-icon>
+                    <span>加密</span>
+                </el-menu-item>
 
 
                 <el-menu-item index="/mainBoard/decrypt" @click="changeActive('/mainBoard/decrypt')">
@@ -53,7 +33,12 @@
                 </el-menu-item>
 
 
-
+                <el-menu-item index="/mainBoard/security" @click="changeActive('/mainBoard/security')">
+                    <el-icon>
+                        <Aim />
+                    </el-icon>
+                    <span>安全性分析</span>
+                </el-menu-item>
 
                 <el-menu-item index="/mainBoard/setting" @click="changeActive('/mainBoard/setting')">
                     <el-icon>
@@ -61,7 +46,6 @@
                     </el-icon>
                     <span>设置</span>
                 </el-menu-item>
-
             </el-menu>
         </el-col>
     </el-row>
@@ -91,21 +75,10 @@ const changeActive = (path: string) => {
 
     height: 100vh;
 
-
     .el-menu-item {
         height: 10vh;
         line-height: 10vh;
         font-size: 2vh;
     }
-}
-
-.menuTitle {
-    font-size: 2vh;
-}
-
-menuItem {
-    height: 10vh;
-    line-height: 10vh;
-    font-size: 2vh;
 }
 </style>
