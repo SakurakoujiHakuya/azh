@@ -1,5 +1,5 @@
 <template>
-    <div class="diagnosis">
+    <div class="security">
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
@@ -84,7 +84,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.diagnosis {
+.security {
     height: 100%;
     width: 100%;
     display: flex;

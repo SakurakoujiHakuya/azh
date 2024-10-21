@@ -88,7 +88,7 @@ app.post('/run-script-de', (req, res) => {
     });
 });
 
-app.post('/run-script-se', (req, res) => {
+app.post('/run-script-chart', (req, res) => {
     exec('python moxingceshi/chart.py', (error, stdout, stderr) => {
         if (error) {
             console.error(`执行错误: ${error}`);
