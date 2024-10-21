@@ -1,9 +1,15 @@
 <template>
-    <div class="security">安全性分析功能页面</div>
+    <button @click="test">点我</button>
+    <MyDialog />
 </template>
 
 <script setup lang='ts'>
-
+import useDialogStore from '../store/dialog';
+import MyDialog from '../components/myDialog.vue';
+const DialogStore = useDialogStore();
+const test = () => {
+    DialogStore.visiable = true
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style></style>

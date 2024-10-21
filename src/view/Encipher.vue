@@ -19,11 +19,18 @@
             <p>正在处理，请稍候...</p>
         </div>
     </div>
+    <MyDialog />
 </template>
 
 <script setup lang='ts'>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import useDialogStore from '../store/dialog';
+import MyDialog from '../components/myDialog.vue';
+const DialogStore = useDialogStore();
+const showMydialog = () => {
+    DialogStore.visiable = true
+}
 
 const beforeEncipher = ref<string>(localStorage.getItem('beforeEncipher') || '');
 const fileInput = ref<HTMLInputElement | null>(null);
@@ -43,7 +50,8 @@ const onFileChange = async (event: Event) => {
         const formData = new FormData();
         formData.append('file', file, 'pt2.bmp');
         await axios.post('/upload-encipher', formData);
-
+        showMydialog();
+        DialogStore.key = DialogStore.inputKey
         // 运行 Python 脚本
         await axios.post('/run-script-en');
 

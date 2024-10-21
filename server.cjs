@@ -88,6 +88,17 @@ app.post('/run-script-de', (req, res) => {
     });
 });
 
+app.post('/run-script-se', (req, res) => {
+    exec('python moxingceshi/chart.py', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`执行错误: ${error}`);
+            return res.status(500).send('运行脚本时出错');
+        }
+        console.log(`stdout: ${stdout}`);
+        console.error(`stderr: ${stderr}`);
+        res.send('脚本运行成功');
+    });
+});
 // 提供静态文件
 app.use('/output', express.static(path.join(__dirname, 'output')));
 

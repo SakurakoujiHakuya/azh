@@ -19,11 +19,18 @@
             <p>正在处理，请稍候...</p>
         </div>
     </div>
+    <MyDialog />
 </template>
 
 <script setup lang='ts'>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import useDialogStore from '../store/dialog';
+import MyDialog from '../components/myDialog.vue';
+const DialogStore = useDialogStore();
+const showMydialog = () => {
+    DialogStore.visiable = true
+}
 
 const beforeDecrypt = ref<string>(localStorage.getItem('beforeDecrypt') || '');
 const fileInput = ref<HTMLInputElement | null>(null);
@@ -44,6 +51,7 @@ const onFileChange = async (event: Event) => {
         formData.append('file', file, 'pt3.bmp');
         await axios.post('/upload-decrypt', formData);
 
+        showMydialog();
         // 运行 Python 脚本
         await axios.post('/run-script-de');
 
@@ -52,6 +60,10 @@ const onFileChange = async (event: Event) => {
         localStorage.setItem('beforeDecrypt', beforeDecrypt.value);
 
         // 更新右侧的图片
+        // if (DialogStore.key != DialogStore.inputKey) {
+        //     decryptImageUrl.value = "/output/error.bmp";
+        // }
+        // else
         decryptImageUrl.value = '/output/jiemi.bmp';
         localStorage.setItem('decryptImageUrl', decryptImageUrl.value);
 
