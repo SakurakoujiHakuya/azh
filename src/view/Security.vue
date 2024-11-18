@@ -3,14 +3,13 @@
         <input type="file" ref="fileInput" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
-                <img v-show="imageUrls !== ''" src="../../output/histogram.jpg" alt="Uploaded Image" />
-                <button v-show="imageUrls !== ''" @click="openImage('../../output/jiami.bmp')">打开图片</button>
+                <img v-show="securityStore.leftImg !== ''" :src="securityStore.leftImg" alt="Uploaded Image" />
+                <button v-show="securityStore.leftImg !== ''" @click="openImage(securityStore.leftImg)">打开图片</button>
             </div>
             <div class="image-wrapper">
-                <img v-show="diagnosisImageUrl !== null" src="../../output/histogram2.jpg" alt="检测结果图像"
+                <img v-show="securityStore.rightImg !== ''" :src="securityStore.rightImg" alt="检测结果图像"
                     class="post-diagnosis" />
-                <button v-show="diagnosisImageUrl !== null"
-                    @click="openImage('../../output/histogram.jpg')">打开图片</button>
+                <button v-show="securityStore.rightImg !== ''" @click="openImage(securityStore.rightImg)">打开图片</button>
             </div>
         </div>
         <div v-if="isLoading" class="loading-overlay">
@@ -23,21 +22,12 @@
 <script setup lang='ts'>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-
+import useSecurityStore from '../store/security';
+const securityStore = useSecurityStore();
 const imageUrls = ref<string>(localStorage.getItem('imageUrls') || '');
 const fileInput = ref<HTMLInputElement | null>(null);
 const diagnosisImageUrl = ref<string | null>(localStorage.getItem('diagnosisImageUrl'));
 const isLoading = ref<boolean>(false);
-
-const getImg = async () => {
-
-    isLoading.value = true; // 开始加载
-
-
-    // 运行 Python 脚本
-    await axios.post('/run-script-chart');
-    isLoading.value = false;
-};
 
 const openImage = (url: string | null) => {
     if (url) {
@@ -45,9 +35,7 @@ const openImage = (url: string | null) => {
     }
 };
 
-onMounted(() => {
-    getImg()
-});
+
 </script>
 
 <style lang="scss" scoped>

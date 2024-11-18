@@ -3,12 +3,13 @@
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
-                <img v-show="beforeEncipher !== ''" :src="beforeEncipher" alt="Uploaded Image" />
-                <button v-show="beforeEncipher !== ''" @click="openImage(beforeEncipher)">打开图片</button>
+                <img v-show="encipherStore.leftImg !== ''" :src="encipherStore.leftImg" alt="" />
+                <button v-show="encipherStore.leftImg !== ''" @click="openImage(encipherStore.leftImg)">打开图片</button>
             </div>
             <div class="image-wrapper">
-                <img v-show="encipherImageUrl !== null" :src="encipherImageUrl" alt="加密结果图像" class="post-encipher" />
-                <button v-show="encipherImageUrl !== null" @click="openImage(encipherImageUrl)">打开图片</button>
+                <img v-show="encipherStore.rightImg !== ''" :src="encipherStore.rightImg" alt=""
+                    class="post-encipher" />
+                <button v-show="encipherStore.rightImg !== ''" @click="openImage(encipherStore.rightImg)">打开图片</button>
             </div>
         </div>
         <div class="eventButton">
@@ -27,27 +28,22 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import useDialogStore from '../store/dialog';
 import MyDialog from '../components/myDialog.vue';
-
+import useEncipherStore from '../store/encipher';
+import useSecurityStore from '../store/security';
+const encipherStore = useEncipherStore();
 const DialogStore = useDialogStore();
-const showMydialog = () => {
-    DialogStore.visiable = true;
-};
+const securityStore = useSecurityStore();
 
-const beforeEncipher = ref<string>(localStorage.getItem('beforeEncipher') || '');
 const fileInput = ref<HTMLInputElement | null>(null);
-const encipherImageUrl = ref<string | null>(localStorage.getItem('encipherImageUrl'));
 const isLoading = ref<boolean>(false);
 
-const generateUniqueFileName = (originalName: string) => {
-    const timestamp = new Date().getTime();
-    const extension = originalName.split('.').pop();
-    return `pt2_${timestamp}.${extension}`;
-};
 
 const onFileChange = async (event: Event) => {
     const files = (event.target as HTMLInputElement).files;
     if (files && files.length > 0) {
         // 显示对话框并等待关闭
+        encipherStore.leftImg = '';
+        encipherStore.rightImg = '';
         await showDialogAndWait();
         isLoading.value = true; // 开始加载
 
@@ -58,20 +54,21 @@ const onFileChange = async (event: Event) => {
         formData.append('file', file, 'pt2.bmp');
         await axios.post('/upload-encipher', formData);
 
-
-
-
         // 运行 Python 脚本
         await axios.post('/run-script-en');
+        await axios.post('/run-script-chart');
 
+        const timestamp = new Date().getTime();
+        securityStore.leftImg = `../../output/histogram.jpg?timestamp=${timestamp}`;
+        securityStore.rightImg = `../../output/histogram2.jpg?timestamp=${timestamp}`;
 
-        beforeEncipher.value = '/input/pt2.bmp';
-        localStorage.setItem('beforeEncipher', beforeEncipher.value);
+        encipherStore.leftImg = `/input/pt2.bmp?timestamp=${timestamp}`;
 
         // 更新右侧的图片
-        encipherImageUrl.value = '/output/jiami.bmp';
-        localStorage.setItem('encipherImageUrl', encipherImageUrl.value);
-        window.location.reload(); // 刷新页面
+        encipherStore.rightImg = `/output/jiami.bmp?timestamp=${timestamp}`;
+
+        isLoading.value = false;
+
     }
 };
 
@@ -99,18 +96,6 @@ const openImage = (url: string | null) => {
     }
 };
 
-onMounted(() => {
-    // 从本地存储加载图片 URL
-    const storedBeforeEncipher = localStorage.getItem('beforeEncipher');
-    if (storedBeforeEncipher) {
-        beforeEncipher.value = storedBeforeEncipher;
-    }
-
-    const storedEncipherImageUrl = localStorage.getItem('encipherImageUrl');
-    if (storedEncipherImageUrl) {
-        encipherImageUrl.value = storedEncipherImageUrl;
-    }
-});
 </script>
 
 <style lang="scss" scoped>

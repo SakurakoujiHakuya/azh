@@ -3,12 +3,13 @@
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
-                <img v-show="beforeDecrypt !== ''" :src="beforeDecrypt" alt="Uploaded Image" />
-                <button v-show="beforeDecrypt !== ''" @click="openImage(beforeDecrypt)">打开图片</button>
+                <img v-show="decryptStore.leftImg !== ''" :src="decryptStore.leftImg" alt="Uploaded Image" />
+                <button v-show="decryptStore.leftImg !== ''" @click="openImage(decryptStore.leftImg)">打开图片</button>
             </div>
             <div class="image-wrapper">
-                <img v-show="decryptImageUrl !== null" :src="decryptImageUrl" alt="解密结果图像" class="post-decrypt" />
-                <button v-show="decryptImageUrl !== null" @click="openImage(decryptImageUrl)">打开图片</button>
+                <img v-show="decryptStore.rightImg !== ''" :src="decryptStore.rightImg" alt="解密结果图像"
+                    class="post-decrypt" />
+                <button v-show="decryptStore.rightImg !== ''" @click="openImage(decryptStore.rightImg)">打开图片</button>
             </div>
         </div>
         <div class="eventButton">
@@ -27,14 +28,10 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import useDialogStore from '../store/dialog';
 import MyDialog from '../components/myDialog.vue';
+import useDecryptStore from '../store/decrypt';
+const decryptStore = useDecryptStore();
 const DialogStore = useDialogStore();
-const showMydialog = () => {
-    DialogStore.visiable = true
-}
-
-const beforeDecrypt = ref<string>(localStorage.getItem('beforeDecrypt') || '');
 const fileInput = ref<HTMLInputElement | null>(null);
-const decryptImageUrl = ref<string | null>(localStorage.getItem('decryptImageUrl'));
 const isLoading = ref<boolean>(false);
 
 const onFileChange = async (event: Event) => {
@@ -56,19 +53,12 @@ const onFileChange = async (event: Event) => {
         // 运行 Python 脚本
         await axios.post('/run-script-de');
 
+        const timestamp = new Date().getTime();
         //这里是因为上传的图片会重命名为pt3.bmp保存在/input下
-        beforeDecrypt.value = '/input/pt3.bmp'
-        localStorage.setItem('beforeDecrypt', beforeDecrypt.value);
+        decryptStore.leftImg = `/input/pt3.bmp?timestamp=${timestamp}`;
 
-        // 更新右侧的图片
-        // if (DialogStore.key != DialogStore.inputKey) {
-        //     decryptImageUrl.value = "/output/error.bmp";
-        // }
-        // else
-        decryptImageUrl.value = '/output/jiemi.bmp';
-        localStorage.setItem('decryptImageUrl', decryptImageUrl.value);
-
-        window.location.reload(); // 刷新页面
+        decryptStore.rightImg = `/output/jiemi.bmp?timestamp=${timestamp}`;
+        isLoading.value = false; // 结束加载
     }
 };
 import { watch } from 'vue';
@@ -95,18 +85,6 @@ const openImage = (url: string | null) => {
     }
 };
 
-onMounted(() => {
-    // 从本地存储加载图片 URL
-    const storedBeforeDecrypt = localStorage.getItem('beforeDecrypt');
-    if (storedBeforeDecrypt) {
-        beforeDecrypt.value = storedBeforeDecrypt;
-    }
-
-    const storedDecryptImageUrl = localStorage.getItem('decryptImageUrl');
-    if (storedDecryptImageUrl) {
-        decryptImageUrl.value = storedDecryptImageUrl;
-    }
-});
 </script>
 
 <style lang="scss" scoped>

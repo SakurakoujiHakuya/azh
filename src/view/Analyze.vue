@@ -9,10 +9,14 @@
 import { ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
 import axios from 'axios';
-
+import useDiagnosisStore from '../store/diagnosis';
+const diagnosisStore = useDiagnosisStore();
 const diagnosisResult = ref<string | null>(null);
 
 onMounted(async () => {
+    if (!diagnosisStore.rightImg) {
+        return;
+    }
     // 读取文件内容
     const response = await axios.get('/output/prediction_result.txt');
     const fileContent = response.data;

@@ -3,12 +3,14 @@
         <input type="file" ref="fileInput" @change="onFileChange" style="display: none;" multiple />
         <div class="images-container">
             <div class="image-wrapper">
-                <img v-show="imageUrls !== ''" :src="imageUrls" alt="Uploaded Image" />
-                <button v-show="imageUrls !== ''" @click="openImage(imageUrls)">打开图片</button>
+                <img v-show="diagnosisStore.leftImg !== ''" :src="diagnosisStore.leftImg" alt="" />
+                <button v-show="diagnosisStore.leftImg !== ''" @click="openImage(diagnosisStore.leftImg)">打开图片</button>
             </div>
             <div class="image-wrapper">
-                <img v-show="diagnosisImageUrl !== null" :src="diagnosisImageUrl" alt="检测结果图像" class="post-diagnosis" />
-                <button v-show="diagnosisImageUrl !== null" @click="openImage(diagnosisImageUrl)">打开图片</button>
+                <img v-show="diagnosisStore.rightImg !== ''" :src="diagnosisStore.rightImg" alt=""
+                    class="post-diagnosis" />
+                <button v-show="diagnosisStore.rightImg !== ''"
+                    @click="openImage(diagnosisStore.rightImg)">打开图片</button>
             </div>
         </div>
         <div class="eventButton">
@@ -22,22 +24,23 @@
 </template>
 
 <script setup lang='ts'>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
-
-const imageUrls = ref<string>(localStorage.getItem('imageUrls') || '');
+import useDiagnosisStore from '../store/diagnosis';
+const diagnosisStore = useDiagnosisStore();
 const fileInput = ref<HTMLInputElement | null>(null);
-const diagnosisImageUrl = ref<string | null>(localStorage.getItem('diagnosisImageUrl'));
 const isLoading = ref<boolean>(false);
 
 const onFileChange = async (event: Event) => {
     const files = (event.target as HTMLInputElement).files;
     if (files && files.length > 0) {
+        // 清空图片路径
+        diagnosisStore.leftImg = '';
+        diagnosisStore.rightImg = '';
         isLoading.value = true; // 开始加载
 
         // 将文件转换为 URL 并存储
         const file = files[0];
-        // imageUrls.value = URL.createObjectURL(file);
 
         // 上传图片并保存到服务器
         const formData = new FormData();
@@ -47,15 +50,16 @@ const onFileChange = async (event: Event) => {
         // 运行 Python 脚本
         await axios.post('/run-script');
 
-        //这里是因为上传的图片会重命名为pt.jpg保存在/input下
-        imageUrls.value = '/input/pt.jpg'
-        localStorage.setItem('imageUrls', imageUrls.value);
+        // 添加时间戳以防止缓存
+        const timestamp = new Date().getTime();
+
+        // 更新左侧的图片
+        diagnosisStore.leftImg = `/input/pt.jpg?timestamp=${timestamp}`;
 
         // 更新右侧的图片
-        diagnosisImageUrl.value = '/output/feature_map_layer_0.png';
-        localStorage.setItem('diagnosisImageUrl', diagnosisImageUrl.value);
+        diagnosisStore.rightImg = `/output/feature_map_layer_0.png?timestamp=${timestamp}`;
 
-        window.location.reload(); // 刷新页面
+        isLoading.value = false; // 结束加载
     }
 };
 
@@ -68,19 +72,6 @@ const openImage = (url: string | null) => {
         window.open(url, '_blank');
     }
 };
-
-onMounted(() => {
-    // 从本地存储加载图片 URL
-    const storedImageUrls = localStorage.getItem('imageUrls');
-    if (storedImageUrls) {
-        imageUrls.value = storedImageUrls;
-    }
-
-    const storedDiagnosisImageUrl = localStorage.getItem('diagnosisImageUrl');
-    if (storedDiagnosisImageUrl) {
-        diagnosisImageUrl.value = storedDiagnosisImageUrl;
-    }
-});
 </script>
 
 <style lang="scss" scoped>

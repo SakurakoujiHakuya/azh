@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import LoginInput from "../components/LoginInput.vue";
 import { useRouter } from "vue-router";
-
+import { ElMessage } from 'element-plus'
 const router = useRouter();
 
 const handleLogin = () => {
   router.push('/mainBoard/diagnosis');
+  ElMessage({
+    message: 'Wellcome administrator!.',
+    type: 'success',
+  })
 }
 
 </script>
