@@ -38,6 +38,9 @@ const onFileChange = async (event: Event) => {
     const files = (event.target as HTMLInputElement).files;
     if (files && files.length > 0) {
         await showDialogAndWait();
+        decryptStore.leftImg = ``;
+
+        decryptStore.rightImg = ``;
         isLoading.value = true; // 开始加载
 
         // 将文件转换为 URL 并存储
