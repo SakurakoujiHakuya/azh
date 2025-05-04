@@ -112,6 +112,6 @@ def decryption(image, key):
 
 # 读取图像并解密保存
 image = Image.open("input/pt3.bmp")
-key = "0.11, 0.12"
+key = "0.1, 0.1"
 decrypted_image = decryption(image, key)
 decrypted_image.save("output/jiemi.bmp")

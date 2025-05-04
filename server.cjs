@@ -89,7 +89,7 @@ app.post('/run-script-de', (req, res) => {
 });
 
 app.post('/run-script-chart', (req, res) => {
-    exec('python moxingceshi/chart.py', (error, stdout, stderr) => {
+    exec('python moxingceshi/NpcrUaciBaci.py', (error, stdout, stderr) => {
         if (error) {
             console.error(`执行错误: ${error}`);
             return res.status(500).send('运行脚本时出错');
@@ -99,6 +99,39 @@ app.post('/run-script-chart', (req, res) => {
         res.send('脚本运行成功');
     });
 });
+
+app.post('/run-script-chartTwo', (req, res) => {
+    exec('python moxingceshi/entropy_analysis.py', (error, stdout, stderr) => {
+        if (error) {
+            console.error(`执行错误: ${error}`);
+            return res.status(500).send('运行脚本时出错');
+        }
+        console.log(`stdout: ${stdout}`);
+        console.error(`stderr: ${stderr}`);
+        res.send('脚本运行成功');
+    });
+});
+
+//key
+// app.post('/save-dialog-values', (req, res) => {
+//     const { filePath, data } = req.body;
+
+//     // 确保目录存在
+//     const fullPath = path.join(__dirname, filePath);
+//     const dir = path.dirname(fullPath);
+//     if (!fs.existsSync(dir)) {
+//         fs.mkdirSync(dir, { recursive: true });
+//     }
+
+//     // 写入 JSON 文件
+//     fs.writeFile(fullPath, JSON.stringify(data, null, 4), 'utf8', (err) => {
+//         if (err) {
+//             console.error('保存 JSON 文件失败:', err);
+//             return res.status(500).send('保存失败');
+//         }
+//         res.send('保存成功');
+//     });
+// });
 // 提供静态文件
 app.use('/output', express.static(path.join(__dirname, 'output')));
 

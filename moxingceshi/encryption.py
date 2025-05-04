@@ -123,6 +123,6 @@ def encryption(image, key):
 
 # 读取图像并加密保存
 image = Image.open("input/pt2.bmp")
-key = "0.11, 0.12"
+key = "0.1, 0.1"
 encrypted_image = encryption(image, key)
 encrypted_image.save("output/jiami.bmp")

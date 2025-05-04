@@ -1,124 +1,170 @@
 <template>
-    <div class="security">
-        <input type="file" ref="fileInput" style="display: none;" multiple />
-        <div class="images-container">
-            <div class="image-wrapper">
-                <img v-show="securityStore.leftImg !== ''" :src="securityStore.leftImg" alt="Uploaded Image" />
-                <button v-show="securityStore.leftImg !== ''" @click="openImage(securityStore.leftImg)">打开图片</button>
-            </div>
-            <div class="image-wrapper">
-                <img v-show="securityStore.rightImg !== ''" :src="securityStore.rightImg" alt="检测结果图像"
-                    class="post-diagnosis" />
-                <button v-show="securityStore.rightImg !== ''" @click="openImage(securityStore.rightImg)">打开图片</button>
-            </div>
-        </div>
-        <div v-if="isLoading" class="loading-overlay">
-            <div class="spinner"></div>
-            <p>正在处理，请稍候...</p>
-        </div>
+    <div class="analyze">
+        <div class="result" v-if="securityResult">{{ securityResult }}</div>
+        <div id="main"></div> <!-- 添加用于展示图表的 div -->
+        <div id="rgb"></div>
     </div>
 </template>
 
 <script setup lang='ts'>
 import { ref, onMounted } from 'vue';
+import * as echarts from 'echarts';
 import axios from 'axios';
-import useSecurityStore from '../store/security';
-const securityStore = useSecurityStore();
-const imageUrls = ref<string>(localStorage.getItem('imageUrls') || '');
-const fileInput = ref<HTMLInputElement | null>(null);
-const diagnosisImageUrl = ref<string | null>(localStorage.getItem('diagnosisImageUrl'));
-const isLoading = ref<boolean>(false);
 
-const openImage = (url: string | null) => {
-    if (url) {
-        window.open(url, '_blank');
+import useEncipherStore from '../store/encipher';
+const encipherStore = useEncipherStore();
+const securityResult = ref<string | null>(null);
+
+onMounted(
+    async () => {
+    //     if(!encipherStore.rightImg){
+    //     return
+    // }
+    try {
+        // 从 JSON 文件读取数据
+        const response = await axios.get('/output/npcr_uaci_baci_results.json');
+        const data = response.data;
+
+        // 提取数据
+        const classNames = ['NPCR', 'UACI'];
+        const probabilities = [data.NPCR, data.UACI];
+
+        // 基于准备好的 DOM，初始化 echarts 实例
+        const myChart = echarts.init(document.getElementById('main'));
+
+        // 绘制柱状图
+        myChart.setOption({
+            title: {
+                text: 'NPCR、UACI 分析结果',
+                // left: 'center'
+            },
+            tooltip: {
+
+            },
+            xAxis: {
+                // type: 'category',
+                data: classNames,
+                axisLabel: {
+                    fontSize: 18 // 设置字体大小
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} %' // 显示百分比
+                }
+            },
+            series: [
+                {
+                    name: '值',
+                    type: 'bar',
+                    data: probabilities,
+                    itemStyle: {
+                        color: '#5470C6' // 设置柱状图颜色
+                    }
+                }
+            ]
+        });
+    } catch (error) {
+        console.error('读取数据失败:', error);
+        securityResult.value = '读取数据失败，请检查文件路径或数据格式。';
     }
-};
 
+    try {
+    console.log('开始读取数据...');
+    const response = await axios.get('/output/entropy_results.json');
+    const data = response.data;
+    console.log('数据读取成功:', data);
 
+    // 提取数据
+    const classNames = ['Entropy_R', 'Entropy_G', 'Entropy_B'];
+    const probabilities = [data.Entropy_R, data.Entropy_G, data.Entropy_B];
+
+    // 检查 DOM 元素是否存在
+    const element = document.getElementById('rgb');
+    if (!element) {
+        console.error('无法找到 #rgb 元素，请检查 DOM 是否正确渲染。');
+        return;
+    }
+
+    // 初始化 ECharts 实例
+    const myChart = echarts.init(element);
+
+    // 绘制柱状图
+    myChart.setOption({
+        title: {
+            text: '信息熵 分析结果',
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow',
+            },
+        },
+        xAxis: {
+            data: classNames,
+            axisLabel: {
+                fontSize: 18,
+            },
+        },
+        yAxis: {
+            type: 'value',
+        },
+        series: [
+            {
+                name: '值',
+                type: 'bar',
+                data: probabilities,
+                itemStyle: {
+                    color: (params:any) => {
+                        // 根据柱状图的索引设置颜色
+                        const colors = ['#FF0000', '#00FF00', '#0000FF']; // 红、绿、蓝
+                        return colors[params.dataIndex];
+                    },
+                },
+                label: {
+                    show: true, // 显示数值
+                    position: 'top', // 数值显示在柱状图顶部
+                    fontSize: 14,
+                    formatter: '{c}', // 显示数值本身
+                },
+            },
+        ],
+    });
+} catch (error) {
+    console.error('读取数据失败:', error);
+    securityResult.value = '读取数据失败，请检查文件路径或数据格式。';
+}
+});
 </script>
 
-<style lang="scss" scoped>
-.security {
-    height: 100%;
-    width: 100%;
+<style scoped>
+.analyze {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    /* flex-direction: column; */
+    /* align-items: center; */
+    height: 100%;
+    /* 使容器占满视口高度 */
+}
 
-    .images-container {
-        width: 100%;
-        height: 85%;
-        display: flex;
-        justify-content: space-around;
+.result {
+    font-size: 22px;
+    font-weight: bold;
+    /* margin: 20px 0; */
+    text-align: center;
+}
 
-        .image-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+#main {
+    margin-top: 5%;
+    margin-left: 5%;
+    width: 50%;
+    height: 90%;
+}
 
-            img {
-                max-width: 92%;
-                max-height: 92%;
-                min-height: 92%;
-                min-width: 92%;
-                // object-fit: contain;
-            }
-
-            button {
-                margin-top: 15px;
-                padding: 15px 85px;
-                // background-color: skyblue;
-                background-color: rgb(84, 92, 100);
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-
-            button:hover {
-                background-color: green;
-                color: white;
-            }
-        }
-    }
-
-    .loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        color: white;
-    }
-
-    .spinner {
-        border: 4px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        border-top: 4px solid white;
-        width: 40px;
-        height: 40px;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
-    }
+#rgb {
+    margin-top: 5%;
+    margin-left: 5%;
+    width: 50%;
+    height: 90%;
 }
 </style>

@@ -29,14 +29,12 @@ import axios from 'axios';
 import useDialogStore from '../store/dialog';
 import MyDialog from '../components/myDialog.vue';
 import useEncipherStore from '../store/encipher';
-import useSecurityStore from '../store/security';
+
 const encipherStore = useEncipherStore();
 const DialogStore = useDialogStore();
-const securityStore = useSecurityStore();
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const isLoading = ref<boolean>(false);
-
 
 const onFileChange = async (event: Event) => {
     const files = (event.target as HTMLInputElement).files;
@@ -52,15 +50,18 @@ const onFileChange = async (event: Event) => {
         // 上传图片并保存到服务器
         const formData = new FormData();
         formData.append('file', file, 'pt2.bmp');
+
         await axios.post('/upload-encipher', formData);
+
+        // 将对话框中的值存储到 input/key.json
+        await saveDialogValuesToJson();
 
         // 运行 Python 脚本
         await axios.post('/run-script-en');
         await axios.post('/run-script-chart');
+        await axios.post('/run-script-chartTwo');
 
         const timestamp = new Date().getTime();
-        securityStore.leftImg = `../../output/histogram.jpg?timestamp=${timestamp}`;
-        securityStore.rightImg = `../../output/histogram2.jpg?timestamp=${timestamp}`;
 
         encipherStore.leftImg = `/input/pt2.bmp?timestamp=${timestamp}`;
 
@@ -68,7 +69,6 @@ const onFileChange = async (event: Event) => {
         encipherStore.rightImg = `/output/jiami.bmp?timestamp=${timestamp}`;
 
         isLoading.value = false;
-
     }
 };
 
@@ -86,6 +86,23 @@ const showDialogAndWait = () => {
     });
 };
 
+const saveDialogValuesToJson = async () => {
+    try {
+        // 获取对话框中的值
+        const dialogValues = DialogStore.inputKey;
+
+        // 将对话框的值发送到服务器并保存为 JSON 文件
+        await axios.post('/save-dialog-values', {
+            filePath: 'input/key.json',
+            data: { key: dialogValues },
+        });
+
+        console.log('对话框值已成功保存到 input/key.json');
+    } catch (error) {
+        console.error('保存对话框值到 JSON 文件失败:', error);
+    }
+};
+
 const triggerFileUpload = () => {
     fileInput.value?.click();
 };
@@ -95,7 +112,6 @@ const openImage = (url: string | null) => {
         window.open(url, '_blank');
     }
 };
-
 </script>
 
 <style lang="scss" scoped>
@@ -122,10 +138,12 @@ const openImage = (url: string | null) => {
             overflow: hidden;
 
             img {
-                max-width: 90%;
-                max-height: 90%;
-                min-height: 90%;
-                min-width: 90%;
+                // max-width: 90%;
+                // max-height: 90%;
+                // min-height: 90%;
+                // min-width: 90%;
+                width: 512px;
+                height: 512px;
                 object-fit: contain;
             }
 
