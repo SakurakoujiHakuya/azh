@@ -113,11 +113,14 @@ const openImage = (url: string | null) => {
             align-items: center;
             overflow: hidden;
 
+
             img {
-                max-width: 90%;
-                max-height: 90%;
-                min-height: 90%;
-                min-width: 90%;
+                // max-width: 90%;
+                // max-height: 90%;
+                // min-height: 90%;
+                // min-width: 90%;
+                width: 512px;
+                height: 512px;
                 object-fit: contain;
             }
 
