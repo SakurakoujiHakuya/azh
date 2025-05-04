@@ -1,6 +1,6 @@
-Predicted Class: Mild_Demented
+Predicted Class: Moderate_Demented
 Class Probabilities:
-Mild_Demented: 0.6971
-Moderate_Demented: 0.1220
-Non_Demented: 0.1360
-Very_Mild_Demented: 0.1312
+Mild_Demented: 0.1001
+Moderate_Demented: 0.6992
+Non_Demented: 0.1283
+Very_Mild_Demented: 0.1300

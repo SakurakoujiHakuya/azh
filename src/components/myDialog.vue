@@ -21,6 +21,7 @@ const DialogStore = useDialogStore();
 const inputK = () => {
     DialogStore.inputKey = key.value
     DialogStore.visiable = false
+    console.log(DialogStore.inputKey)
 }
 </script>
 <style>

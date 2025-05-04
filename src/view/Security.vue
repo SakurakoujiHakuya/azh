@@ -96,10 +96,10 @@ onMounted(
             text: '信息熵 分析结果',
         },
         tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'shadow',
-            },
+            // trigger: 'axis',
+            // axisPointer: {
+            //     type: 'shadow',
+            // },
         },
         xAxis: {
             data: classNames,

@@ -54,7 +54,7 @@ const onFileChange = async (event: Event) => {
         await axios.post('/upload-encipher', formData);
 
         // 将对话框中的值存储到 input/key.json
-        await saveDialogValuesToJson();
+        // await saveDialogValuesToJson();
 
         // 运行 Python 脚本
         await axios.post('/run-script-en');
@@ -86,22 +86,27 @@ const showDialogAndWait = () => {
     });
 };
 
-const saveDialogValuesToJson = async () => {
-    try {
-        // 获取对话框中的值
-        const dialogValues = DialogStore.inputKey;
+// const saveDialogValuesToJson = async () => {
+//     try {
+//         // 获取对话框中的值
+//         const dialogValues = DialogStore.inputKey;
 
-        // 将对话框的值发送到服务器并保存为 JSON 文件
-        await axios.post('/save-dialog-values', {
-            filePath: 'input/key.json',
-            data: { key: dialogValues },
-        });
+//         if (!dialogValues) {
+//             console.error('对话框值为空，无法保存');
+//             return;
+//         }
 
-        console.log('对话框值已成功保存到 input/key.json');
-    } catch (error) {
-        console.error('保存对话框值到 JSON 文件失败:', error);
-    }
-};
+//         // 将对话框的值发送到服务器并保存为 JSON 文件
+//         await axios.post('http://localhost:3000/save-dialog-values', {
+//             filePath: 'input/key.json',
+//             data: { key: dialogValues },
+//         });
+
+//         console.log('对话框值已成功保存到 input/key.json');
+//     } catch (error) {
+//         console.error('保存对话框值到 JSON 文件失败:', error);
+//     }
+// };
 
 const triggerFileUpload = () => {
     fileInput.value?.click();

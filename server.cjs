@@ -112,18 +112,25 @@ app.post('/run-script-chartTwo', (req, res) => {
     });
 });
 
-//key
+// key
+app.use(express.json()); // 确保解析 JSON 请求体
+
 // app.post('/save-dialog-values', (req, res) => {
+//     console.log('请求体:', req.body); // 调试日志
 //     const { filePath, data } = req.body;
 
-//     // 确保目录存在
+//     if (!filePath || !data) {
+//         return res.status(400).send('请求体无效');
+//     }
+
 //     const fullPath = path.join(__dirname, filePath);
+//     console.log('完整路径:', fullPath); // 调试日志
+
 //     const dir = path.dirname(fullPath);
 //     if (!fs.existsSync(dir)) {
 //         fs.mkdirSync(dir, { recursive: true });
 //     }
 
-//     // 写入 JSON 文件
 //     fs.writeFile(fullPath, JSON.stringify(data, null, 4), 'utf8', (err) => {
 //         if (err) {
 //             console.error('保存 JSON 文件失败:', err);
