@@ -41,7 +41,7 @@ const handleBlur = () => {
   }
 }
 
-const handleInput = (event) => {
+const handleInput = (event:any) => {
   inputValue.value = event.target.value;
 
   isEmpty.value = inputValue.value === '';

@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang='ts'>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 import useDialogStore from '../store/dialog';
 import MyDialog from '../components/myDialog.vue';

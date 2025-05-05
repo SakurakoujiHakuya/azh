@@ -11,8 +11,8 @@ import { ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
 import axios from 'axios';
 
-import useEncipherStore from '../store/encipher';
-const encipherStore = useEncipherStore();
+// import useEncipherStore from '../store/encipher';
+// const encipherStore = useEncipherStore();
 const securityResult = ref<string | null>(null);
 
 onMounted(
